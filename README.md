@@ -1,6 +1,6 @@
-# Cortex Code Cookbook
+# Snowflake CoCo Cookbook
 
-A collection of cookbook-style recipes for [Cortex Code](https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code), Snowflake's AI coding assistant CLI.
+A collection of cookbook-style recipes for [Snowflake CoCo](https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code), Snowflake's AI coding assistant CLI.
 
 ## Directory Structure
 
@@ -31,7 +31,7 @@ cortex-code-cookbook/
 | ai | [cortex-analyst-101](cookbook/ai/cortex-analyst-101/) | Natural-language queries against a semantic model with Cortex Analyst |
 | ai | [assistant-ui-chat-demo](cookbook/ai/assistant-ui-chat-demo/) | Vite + React chat UI using assistant-ui primitives, wired to `@snowflake/cortex-code-agent-sdk` |
 | data-engineering | [snowpark-data-pipeline](cookbook/data-engineering/snowpark-data-pipeline/) | Snowpark Python pipeline: ingest, transform, and write curated output tables |
-| ml | [forecast-sales](cookbook/ml/forecast-sales/) | Forecast monthly sales with `SNOWFLAKE.ML.FORECAST` using Cortex Code prompts |
+| ml | [forecast-sales](cookbook/ml/forecast-sales/) | Forecast monthly sales with `SNOWFLAKE.ML.FORECAST` using CoCo prompts |
 | sis | [sis-dashboard-deploy](cookbook/sis/sis-dashboard-deploy/) | Deploy a monthly sales dashboard to Snowflake as a Streamlit-in-Snowflake (SiS) app |
 | analytics | [advanced-analytics-window-functions](cookbook/analytics/advanced-analytics-window-functions/) | Window functions for moving averages, rankings, and period-over-period analysis |
 

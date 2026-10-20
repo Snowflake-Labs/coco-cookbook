@@ -1,6 +1,6 @@
 # Forecast Sales
 
-Use `SNOWFLAKE.ML.FORECAST` to predict future monthly sales from historical data -- all in SQL, driven by Cortex Code prompts.
+Use `SNOWFLAKE.ML.FORECAST` to predict future monthly sales from historical data -- all in SQL, driven by CoCo prompts.
 
 ## Files
 
@@ -17,9 +17,9 @@ Use `SNOWFLAKE.ML.FORECAST` to predict future monthly sales from historical data
 
 Run `sample_data.sql` in your Snowflake account to create the `CORTEX_COOKBOOK.ML.MONTHLY_SALES` table.
 
-## Prompt for Cortex Code
+## Prompt for CoCo
 
-Copy-paste the prompt below into Cortex Code. It walks through the full workflow: train a multi-series forecast model, generate predictions, and visualize results.
+Copy-paste the prompt below into CoCo. It walks through the full workflow: train a multi-series forecast model, generate predictions, and visualize results.
 
 ```
 I have a table CORTEX_COOKBOOK.ML.MONTHLY_SALES with columns:

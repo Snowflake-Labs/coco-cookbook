@@ -21,7 +21,7 @@ The entire backend runs as a Vite plugin — no separate server process. A custo
 ## Prerequisites
 
 - Node.js ≥ 20
-- Cortex Code CLI on `PATH`:
+- CoCo CLI on `PATH`:
   ```bash
   curl -LsS https://ai.snowflake.com/static/cc-scripts/install.sh | CORTEX_CHANNEL=beta sh
   ```

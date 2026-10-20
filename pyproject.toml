@@ -1,7 +1,7 @@
 [project]
 name = "cortex-code-cookbook"
 version = "0.1.0"
-description = "Cortex Code cookbook samples"
+description = "CoCo cookbook samples"
 requires-python = ">=3.11"
 dependencies = []
 

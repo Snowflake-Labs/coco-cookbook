@@ -1,6 +1,6 @@
 # Snowpark Data Pipeline
 
-Build a scalable data transformation pipeline using Snowpark Python -- ingest raw data, transform it, and write curated output tables, all driven by Cortex Code prompts.
+Build a scalable data transformation pipeline using Snowpark Python -- ingest raw data, transform it, and write curated output tables, all driven by CoCo prompts.
 
 ## Files
 
@@ -18,9 +18,9 @@ Build a scalable data transformation pipeline using Snowpark Python -- ingest ra
 
 Run `sample_data.sql` in your Snowflake account to create the `CORTEX_COOKBOOK.DATA_ENGINEERING.RAW_ORDERS` table.
 
-## Prompt for Cortex Code
+## Prompt for CoCo
 
-Copy-paste the prompt below into Cortex Code. It walks through building an end-to-end Snowpark pipeline: read raw data, apply transformations, and write results.
+Copy-paste the prompt below into CoCo. It walks through building an end-to-end Snowpark pipeline: read raw data, apply transformations, and write results.
 
 ```
 I have a table CORTEX_COOKBOOK.DATA_ENGINEERING.RAW_ORDERS with columns:
