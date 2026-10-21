@@ -78,7 +78,7 @@ const EmptyState: FC = () => (
       </svg>
     </div>
     <p style={{ margin: 0, fontSize: "1rem", fontWeight: 500, color: "var(--fg-default)" }}>
-      Ask Cortex Code anything
+      Ask CoCo anything
     </p>
     <p style={{ margin: 0, fontSize: "0.8125rem", color: "var(--fg-muted)", maxWidth: "22rem", lineHeight: 1.65 }}>
       Query your Snowflake data, explore schemas, and run SQL — with permission controls at every step.

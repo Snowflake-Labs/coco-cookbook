@@ -1,6 +1,6 @@
 # Advanced Analytics with Window Functions
 
-Use SQL window functions to compute running totals, moving averages, rankings, and period-over-period comparisons -- all driven by Cortex Code prompts.
+Use SQL window functions to compute running totals, moving averages, rankings, and period-over-period comparisons -- all driven by CoCo prompts.
 
 ## Files
 
@@ -17,9 +17,9 @@ Use SQL window functions to compute running totals, moving averages, rankings, a
 
 Run `sample_data.sql` in your Snowflake account to create the `CORTEX_COOKBOOK.SQL.DAILY_SALES` table.
 
-## Prompt for Cortex Code
+## Prompt for CoCo
 
-Copy-paste the prompt below into Cortex Code. It walks through several window function patterns on the sample data.
+Copy-paste the prompt below into CoCo. It walks through several window function patterns on the sample data.
 
 ```
 I have a table CORTEX_COOKBOOK.SQL.DAILY_SALES with columns:

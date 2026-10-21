@@ -1,6 +1,6 @@
 # Cortex Analyst 101
 
-Use Cortex Analyst to ask natural-language questions against a semantic model and get SQL answers -- all driven by Cortex Code prompts.
+Use Cortex Analyst to ask natural-language questions against a semantic model and get SQL answers -- all driven by CoCo prompts.
 
 ## Files
 
@@ -17,9 +17,9 @@ Use Cortex Analyst to ask natural-language questions against a semantic model an
 
 Run `sample_data.sql` in your Snowflake account to create the `CORTEX_COOKBOOK.AI.REVENUE` table.
 
-## Prompt for Cortex Code
+## Prompt for CoCo
 
-Copy-paste the prompt below into Cortex Code. It walks through building a semantic model and querying it with Cortex Analyst.
+Copy-paste the prompt below into CoCo. It walks through building a semantic model and querying it with Cortex Analyst.
 
 ```
 I have a table CORTEX_COOKBOOK.AI.REVENUE with columns:
