@@ -1,0 +1,16 @@
+# Keys and secrets
+*.p8
+*.pem
+*.pub
+.env
+rails_app/config/master.key
+
+# Rails runtime
+rails_app/vendor/bundle/
+rails_app/.bundle/
+rails_app/log/*
+rails_app/tmp/*
+rails_app/storage/*
+!rails_app/log/.keep
+!rails_app/tmp/.keep
+!rails_app/storage/.keep
