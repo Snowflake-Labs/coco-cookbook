@@ -4,11 +4,15 @@ class AgentChatsController < ApplicationController
   include ActionController::Live
 
   def create
+    # Only this browser's conversation, never one picked by ID from the request (IDOR).
+    # In an app with logins, scope to the user instead: current_user.conversations.find(...)
+    convo = Conversation.find_by(id: session[:conversation_id])
+    return head :not_found unless convo
+
     response.headers["Content-Type"]      = "text/event-stream"
     response.headers["Cache-Control"]     = "no-cache"
     response.headers["X-Accel-Buffering"] = "no" # disable nginx buffering
 
-    convo = Conversation.find(params[:conversation_id])
     sse   = SSE.new(response.stream, retry: 3000)
 
     SNOWFLAKE_AGENT.stream(params.require(:message),

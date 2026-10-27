@@ -23,7 +23,6 @@
 <% end %>
 
 <%= javascript_tag nonce: true do %>
-  const conversationId = <%= @conversation.id %>;
   const csrf = document.querySelector("meta[name=csrf-token]").content;
   const log = document.getElementById("log");
   const status = document.getElementById("status");
@@ -89,7 +88,7 @@
     const res = await fetch("/agent_chats", {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf },
-      body: JSON.stringify({ conversation_id: conversationId, message })
+      body: JSON.stringify({ message })
     });
     const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
     let buf = "";

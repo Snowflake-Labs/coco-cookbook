@@ -113,6 +113,7 @@ uses the context of the first answer.
 - `EventSource` only supports GET, so read the POST response body with `fetch()` instead.
 - Chart specs come with a fixed width. Set `width: "container"` to make them responsive.
 - Snowflake dates in chart data are midnight UTC. Use a `utc` time unit on the x-axis, or every month shifts back by one in US time zones.
+- Never look up a conversation by an ID from the request: anyone could post into someone else's thread (IDOR). This demo keeps it in the encrypted session cookie. In an app with logins, use `current_user.conversations.find(...)`.
 - Each `ActionController::Live` request holds a Puma thread for the whole answer, so size Puma accordingly or use background runs.
 
 ## Cleanup
