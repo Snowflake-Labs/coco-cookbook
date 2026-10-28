@@ -1,0 +1,114 @@
+<main style="max-width: 720px; margin: 0 auto; height: 100vh; display: flex; flex-direction: column; font-family: system-ui, sans-serif; padding: 0 1rem; box-sizing: border-box;">
+  <header>
+    <h1 style="margin-bottom:.25rem;">Revenue Agent</h1>
+    <p style="color:#888; margin-top:0;">Rails &rarr; Cortex Agents REST API (<code>agent:run</code>), streamed over SSE.</p>
+  </header>
+
+  <div id="log" style="flex:1; overflow-y:auto;"></div>
+
+  <footer style="padding:.5rem 0 1rem;">
+    <p id="status" style="color:#888; font-size:.9rem; min-height:1.2em; margin:.25rem 0;"></p>
+    <form id="ask" style="display:flex; gap:.5rem;">
+      <input id="message" placeholder="Which product tier is the most profitable?" style="flex:1; padding:.5rem;" autofocus>
+      <button>Ask</button>
+    </form>
+  </footer>
+</main>
+
+<% content_for :head do %>
+  <%# Renders the Vega-Lite specs the agent returns in response.chart events. Pin versions; vendor them for production. %>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.21.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
+<% end %>
+
+<%= javascript_tag nonce: true do %>
+  const csrf = document.querySelector("meta[name=csrf-token]").content;
+  const log = document.getElementById("log");
+  const status = document.getElementById("status");
+
+  // Tiny markdown renderer: escape HTML first so agent output can't inject markup,
+  // then handle **bold**, *italic*, `code`, "- " bullets, and line breaks.
+  function renderMarkdown(md) {
+    const esc = md.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const inline = (s) => s
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[^*])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>");
+    let html = "", inList = false;
+    for (const line of esc.split("\n")) {
+      const item = line.match(/^\s*[-*] (.*)$/);
+      if (item && !inList) { html += "<ul>"; inList = true; }
+      if (!item && inList) { html += "</ul>"; inList = false; }
+      html += item ? `<li>${inline(item[1])}</li>` : inline(line) + "<br>";
+    }
+    return html + (inList ? "</ul>" : "");
+  }
+
+  function bubble(who, text) {
+    const p = document.createElement("p");
+    p.innerHTML = `<b>${who}:</b> `;
+    const span = document.createElement("span");
+    span.textContent = text;
+    p.appendChild(span);
+    log.appendChild(p);
+    return span;
+  }
+
+  // Charts go in their own element so later text deltas don't overwrite them.
+  function renderChart(specJson) {
+    const div = document.createElement("div");
+    div.style.cssText = "margin:0 0 1rem; width:100%;";
+    log.appendChild(div);
+    // The agent's spec has a fixed size; fill the chat column and resize with the window instead.
+    const spec = { ...JSON.parse(specJson), width: "container", autosize: { type: "fit", contains: "padding" } };
+    // Snowflake dates arrive as midnight UTC; draw them in UTC so Jan 1 doesn't show as Dec 31 locally.
+    const x = spec.encoding?.x;
+    if (x?.type === "temporal") {
+      x.title ??= x.field; // otherwise Vega appends "(year-month-date)"
+      x.timeUnit = "utc" + String(x.timeUnit || "yearmonthdate").replace(/^utc/, "");
+      if (x.scale) delete x.scale.type;
+    }
+    const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+    vegaEmbed(div, spec, { actions: false, theme: dark ? "dark" : undefined })
+      .then(() => { log.scrollTop = log.scrollHeight; })
+      .catch((err) => { div.textContent = `[chart error: ${err.message}]`; });
+  }
+
+  document.getElementById("ask").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const input = document.getElementById("message");
+    const message = input.value.trim() || input.placeholder;
+    input.value = "";
+    bubble("You", message);
+    const answer = bubble("Agent", "");
+    let raw = "";
+
+    // EventSource only does GET, so read the POST response body as a stream.
+    const res = await fetch("/agent_chats", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf },
+      body: JSON.stringify({ message })
+    });
+    const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+    let buf = "";
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += value;
+      let idx;
+      while ((idx = buf.indexOf("\n\n")) >= 0) {
+        const block = buf.slice(0, idx); buf = buf.slice(idx + 2);
+        const event = (block.match(/^event: ?(.*)$/m) || [])[1];
+        const data = (block.match(/^data: ?(.*)$/m) || [])[1];
+        if (!event || !data) continue;
+        const json = JSON.parse(data);
+        if (event === "delta") { raw += json.text; answer.innerHTML = renderMarkdown(raw); log.scrollTop = log.scrollHeight; }
+        if (event === "chart") renderChart(json.spec);
+        if (event === "status") status.textContent = json.status;
+        if (event === "error") answer.append(` [error: ${json.message}]`);
+        if (event === "done") status.textContent = "";
+      }
+    }
+  });
+<% end %>
